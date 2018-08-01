@@ -1,0 +1,78 @@
+staticfiles
+test.py
+notice-templates/Notice 30 Day.doc
+notice-templates/Notice 60 Day.doc
+notice-templates/Notice Pay or Quit.doc
+notice-templates/Notice cure or quit.doc
+notice-templates/Notice forcible detainer.doc
+notice-templates/Notice nuisance.doc
+notice-templates/Notice post-foreclosure.doc
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+.env
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+.idea
+*.sw[op]
+*.orig
+*.db
+*.log
+
+# Media and compiled static
+# media
+
+# Local settings
+settings_local.py
+
+# OS X
+.DS_Store
+dump_loc_prodgz.sh
+load_prod.sh
+
+# Vim plugins
+.ropeproject/
+
+# Upload folder
+udgenerator/uploads/
+
+# DB dumps
+*.dump
+
+# Local static
+udgenerator/static/bootstrap.js
+udgenerator/static/jquery-ui.min.js
+udgenerator/static/jquery.min.js

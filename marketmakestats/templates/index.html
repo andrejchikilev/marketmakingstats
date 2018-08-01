@@ -1,0 +1,19 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Make Market Stats</title>
+    </head>
+    {% if success %}
+        <p><font color="green">Success</font></p>
+        <p>Last entry: {{ last_entry }}</p>
+    {% endif %}
+    <body>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <input type="submit" value="Submit" />
+        </form>
+    </body>
+</html>
