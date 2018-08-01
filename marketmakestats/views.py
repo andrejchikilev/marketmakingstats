@@ -35,26 +35,27 @@ class MarketMakeStatsView(View):
                 context['success'] = True
                 context['last_entry'] = '{}'.format(ReturnedTrade.objects.last())
             else:
-                stats = {}
+                stats = []
                 interval = form.cleaned_data['interval']
                 percent = form.cleaned_data['percent']
                 period = form.cleaned_data['period']
                 for market in DEFAULT_MARKETS:
-                    stats[market] = makeMarketStats(market, interval, percent, period)
+                    stats.append([market, makeMarketStats(market, interval, percent, period)])
                     new_entry = ReturnedTrade.objects.create(
                         market=market,
                         interval=interval,
                         percent=percent,
                         period=period,
                         query_date=datetime.date.today(),
-                        returned_trades=stats[market],
+                        returned_trades=stats[len(stats)-1][1],
                     )
                     new_entry.save()
-                    context.update(
-                        success=True,
-                        interval=interval,
-                        percent=percent,
-                        period=period,
-                        stats=stats,
-                    )
+                stats.sort(key=lambda x: x[1], reverse=True)
+                context.update(
+                    success=True,
+                    interval=interval,
+                    percent=percent,
+                    period=period,
+                    stats=stats,
+                )
         return render(request, self.template_name, context)

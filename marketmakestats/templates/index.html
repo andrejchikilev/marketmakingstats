@@ -29,10 +29,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for market, returned_trades in stats.items %}
+                {% for item in stats %}
                 <tr>
-                    <td>{{ market }}</td>
-                    <td>{{ returned_trades }}</td>
+                    <td>{{ item.0 }}</td>
+                    <td>{{ item.1 }}</td>
                 </tr>
                 {% endfor%}
             </tbody>
