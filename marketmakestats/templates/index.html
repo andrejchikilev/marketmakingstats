@@ -5,15 +5,38 @@
     <head>
         <title>Make Market Stats</title>
     </head>
+    <body>
     {% if success %}
         <p><font color="green">Success</font></p>
+        {% if last_entry %}
         <p>Last entry: {{ last_entry }}</p>
+        {% endif %}
     {% endif %}
-    <body>
         <form method="post">
             {% csrf_token %}
             {{ form.as_table }}
             <input type="submit" value="Submit" />
         </form>
+    {% if stats%}
+        <table border="1">
+            <caption>
+                <strong>Interval:</strong> {{ interval }}h. <strong>Percent:</strong> {{ percent }}%. <strong>Period:</strong> {{ period }}d.
+            </caption>
+            <thead>
+                <tr>
+                    <th>Market</th>
+                    <th>Returned Trades</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for market, returned_trades in stats.items %}
+                <tr>
+                    <td>{{ market }}</td>
+                    <td>{{ returned_trades }}</td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    {% endif %}
     </body>
 </html>

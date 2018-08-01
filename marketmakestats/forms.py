@@ -9,6 +9,10 @@ class MarketRequestForm(forms.ModelForm):
         model = ReturnedTrade
         fields = ['market', 'interval', 'percent', 'period']
 
+    def __init__(self, *args, **kwargs):
+        super(MarketRequestForm, self).__init__(*args, **kwargs)
+        self.fields['market'].required = False
+
     def save(self, commit=True):
         instance = super(MarketRequestForm, self).save(commit=False)
         instance.query_date = datetime.date.today()
