@@ -1,42 +1,52 @@
+{% extends "base.html" %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Make Market Stats</title>
-    </head>
-    <body>
-    {% if success %}
-        <p><font color="green">Success</font></p>
-        {% if last_entry %}
-        <p>Last entry: {{ last_entry }}</p>
-        {% endif %}
-    {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_table }}
-            <input type="submit" value="Submit" />
-        </form>
-    {% if stats%}
-        <table border="1">
-            <caption>
-                <strong>Interval:</strong> {{ interval }}h. <strong>Percent:</strong> {{ percent }}%. <strong>Period:</strong> {{ period }}d.
-            </caption>
-            <thead>
-                <tr>
-                    <th>Market</th>
-                    <th>Returned Trades</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in stats %}
-                <tr>
-                    <td>{{ item.0 }}</td>
-                    <td>{{ item.1 }}</td>
-                </tr>
-                {% endfor%}
-            </tbody>
-        </table>
-    {% endif %}
-    </body>
-</html>
+{% block headtitle %}Make Market Stats{% endblock headtitle %}
+{% block extra_head %}
+  <script type="text/javascript" src="{% static 'js/plot_chart.js' %}"></script>   
+{% endblock extra_head %}
+{% block content %}
+  <div class="row">
+    <div class="one-third column">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <input class="button-primary" value="Submit" type="submit" />
+      </form>
+      {% if success %}
+      <h4><font color="green">Success</font></h4>
+      {% endif %}
+    </div>
+    <div class="two-thirds column">
+      {% if last_entry %}
+      <!--      <p>Last entry: {{ last_entry }}</p> -->
+      {% endif %}
+      {% if stats%}
+      <table class="u-full-width">
+        <caption>
+          <strong>Interval:</strong> {{ interval }}h. <strong>Percent:</strong> {{ percent }}%. <strong>Period:</strong> {{ period }}d.
+        </caption>
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Returned Trades</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in stats %}
+          <tr>
+            <td>{{ item.0 }}</td>
+            <td>{{ item.1 }}</td>
+          </tr>
+          {% endfor%}
+        </tbody>
+      </table>
+      {% endif %}
+      {% if chart_data%}
+        <canvas id="myChart" ></canvas>
+        <script type="text/javascript">
+          window.mmslocal.chart_data = {{ chart_data|safe }};
+        </script>   
+      {% endif %}
+    </div>
+  </div>
+{% endblock content%}

@@ -1,0 +1,16 @@
+body {
+  margin: 20px 0px;
+}
+
+input {
+  min-width: 100%;
+}
+
+input.button-primary {
+  min-width: auto;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+}
