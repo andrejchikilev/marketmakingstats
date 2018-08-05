@@ -1,8 +1,8 @@
 (function ($){
     $(document).ready(function () {
 
-        function plot_test(){
-            var ctx = document.getElementById("myChart");
+        function plot_chart(){
+            var ctx = document.getElementById("marketChart");
             ctx.style.height = '400px';
             ctx.style.width = '100%';
             var cfg = {
@@ -45,8 +45,8 @@
 				    }
 			    },
 		    };
-            var myChart = new Chart(ctx, cfg);
+            var marketChart = new Chart(ctx, cfg);
         };
-        plot_test();
+        plot_chart();
     });
 })(jQuery);
