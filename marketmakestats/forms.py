@@ -5,9 +5,20 @@ import datetime
 
 
 class MarketRequestForm(forms.ModelForm):
+    rate = forms.FloatField(
+        required=False,
+        label='Custom market rate',
+    )
+
     class Meta:
         model = ReturnedTrade
         fields = ['market', 'interval', 'percent', 'period']
+        widgets = {
+            'market': forms.widgets.TextInput(attrs={'placeholder': 'e.g.: STEEM/ETH'}),
+            'interval': forms.widgets.NumberInput(attrs={'placeholder': 'hours'}),
+            'percent': forms.widgets.NumberInput(attrs={'placeholder': '%'}),
+            'period': forms.widgets.NumberInput(attrs={'placeholder': 'days'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(MarketRequestForm, self).__init__(*args, **kwargs)

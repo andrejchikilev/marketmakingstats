@@ -60,7 +60,7 @@ def getData(fcur, tcur, delta_time, start_day, current_time=None):
         return data
 
 
-def makeMarketStats(market, interval, percent, period, get_data=False):
+def makeMarketStats(market, interval, percent, period, rate=None, get_data=False):
     ratio = percent / 100
     start_day = datetime.datetime.now() - datetime.timedelta(days=period)
 
@@ -70,6 +70,9 @@ def makeMarketStats(market, interval, percent, period, get_data=False):
 
     data = getData(fcur, tcur, interval, start_day)
     if get_data:
+        if rate:
+            chart_data = list(map(lambda x: [x[0], x[1] + rate - current_rate], data))
+            return chart_data
         return data
 
     rates = [current_rate]

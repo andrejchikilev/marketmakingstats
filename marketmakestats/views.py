@@ -37,7 +37,10 @@ class MarketMakeStatsView(View):
                 form.save()
                 context['success'] = True
                 context['last_entry'] = '{}'.format(ReturnedTrade.objects.last())
-                raw_chart_data = makeMarketStats(form.cleaned_data['market'], interval, percent, period, get_data=True)
+                if form.data['rate']:
+                    raw_chart_data = makeMarketStats(form.cleaned_data['market'], interval, percent, period, rate=form.cleaned_data['rate'], get_data=True)
+                else:
+                    raw_chart_data = makeMarketStats(form.cleaned_data['market'], interval, percent, period, get_data=True)
                 chart_data = list(map(lambda x: {'t': x[0], 'y': x[1]}, raw_chart_data))
                 context['chart_data'] = chart_data
             else:
