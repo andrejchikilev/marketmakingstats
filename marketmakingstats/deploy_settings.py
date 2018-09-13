@@ -1,7 +1,7 @@
 import os
 
 USER = 'root'
-HOST = '188.166.10.248'
+HOST = '165.227.126.229'
 
 CURRENT_HOST = '165.227.126.229'
 
@@ -53,11 +53,7 @@ DATABASE_URL = 'postgres://%s:%s@%s/%s' % (DB_USER, DB_PASSWORD, DB_HOST, DB_NAM
 # Systemd service name
 BACKEND_SERVICE = 'marketmakingstats.service'
 
-
-LOCAL_MACHINE_NAME = os.uname().nodename
-#HOST = '165.227.126.229'
-HOST = 'andrejch.online'
-
+SETTINGS_MODULE = 'marketmakingstats.prod_settings'
 ENVIRONMENTS = {
     # TODO: this may include more env-specific things like
     # deployment users, database credentials, etc

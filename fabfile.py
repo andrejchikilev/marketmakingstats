@@ -12,31 +12,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('fabfile')
 
 
-# @task
-# def _prepare_env(c):
-#     config = Config()
-#     with Connection(HOST, ROOT_USER) as c:
-#         try:
-#             c.run('cat /etc/passwd | grep {user}'.format(user=DEPLOYMENT_USER))
-#         except Exception:
-#             c.run('addgroup {}'.format(DEPLOYMENT_GROUP))
-#             c.run('useradd {user} -p {password}'.format(
-#                 user=DEPLOYMENT_USER,
-#                 password=os.getenv('DEPLOY_USER_PASS')
-#             ))
-#         import pudb; pudb.set_trace()
-#         try:
-#             c.run('su -c "mkdir ~/.ssh" {user}'.format(user=DEPLOYMENT_USER))
-#             c.run('su -c "touch ~/.ssh/authorized_keys" {user}'.format(user=DEPLOYMENT_USER))
-#             c.run('cat .ssh/authorized_keys | grep {} >> /home/{}/.ssh/authorized_keys'.format(
-#                 LOCAL_MACHINE_NAME,
-#                 DEPLOYMENT_USER,
-#             ))
-#             print('ok')
-#         except Exception:
-#             pass
-
-
 @task
 def create_non_priveledged_user():
     with settings(warn_only=True):
@@ -141,7 +116,7 @@ def create_database():
 
 @task
 def prepare():
-    install_system_packages() # V
+    install_system_packages()
     checkout_repository()
     create_deploy_dirs()
     prepare_virtualenv()
