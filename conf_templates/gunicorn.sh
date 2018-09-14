@@ -22,4 +22,4 @@ exec gunicorn --pythonpath "%(DEPLOY_DIR)s" \
     --group "%(GROUP)s" \
     --log-level "info" \
     --log-file "$LOG_FILE" \
-    nsfwchecker.wsgi:application
+    marketmakingstats.wsgi:application

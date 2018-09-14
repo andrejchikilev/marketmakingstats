@@ -305,7 +305,7 @@ def clean_pyc():
 def migrate():
     with cd(DEPLOY_DIR):
         with settings(sudo_user=DEPLOYMENT_USER,
-                      sudo_prefix=SUDO_PREFIX), prefix('workon nsfwchecker'):
+                      sudo_prefix=SUDO_PREFIX), prefix('workon %s' % ENV_NAME):
             sudo('python manage.py migrate')
 
 
