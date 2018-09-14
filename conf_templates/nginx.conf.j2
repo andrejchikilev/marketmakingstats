@@ -1,0 +1,93 @@
+server {
+    server_name {{ CURRENT_HOST }};
+
+    {%-if ENV == "VAGRANT" %}
+    listen      80;
+    {%- else %}
+    listen      443 ssl;
+    {%- endif %}
+
+    {% if ENV == "VAGRANT" %}
+    {# Do not use certificates on vagrant installation #}
+    {%- else %}
+    ssl_certificate /etc/letsencrypt/live/nsfwchecker.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nsfwchecker.com/privkey.pem;
+    {%- endif %}
+
+    access_log {{ DEPLOY_DIR }}/logs/nginx-access.log;
+    error_log  {{ DEPLOY_DIR }}/logs/nginx-error.log;
+
+    client_max_body_size 10M;
+
+    if ($http_host != $server_name) {
+        return 400 $http_host;
+    }
+
+    location {{ STATIC_URL }} {
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' 'X-Requested-With,Accept,Content-Type, Origin';
+        alias {{ STATIC_ROOT }}/;
+    }
+
+    location {{ MEDIA_URL }} {
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' 'X-Requested-With,Accept,Content-Type, Origin';
+        alias {{ MEDIA_ROOT}}/;
+    }
+
+    location / {
+        if ($request_method = 'OPTIONS') {
+
+            add_header 'Access-Control-Allow-Origin' "$http_origin";
+
+            add_header 'Access-Control-Allow-Credentials' 'true';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+
+            add_header 'Access-Control-Allow-Headers' 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+
+            return 204;
+        }
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
+        add_header 'Access-Control-Allow-Headers' 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Accept,Origin' always;
+
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        {% if ENV != "VAGRANT" %}
+        proxy_set_header        X-Forwarded-Proto http;
+        {% else %}
+        proxy_set_header        X-Forwarded-Proto https;
+        {% endif %}
+        proxy_set_header        Host $http_host;
+        proxy_redirect          off;
+        proxy_pass              http://localhost:{{ GUNI_PORT }};
+    }
+}
+
+{% if ENV != "VAGRANT" %}
+server {
+    server_name www.{{ CURRENT_HOST }}
+                www.{{ HOST }};
+    return 301 https://{{ CURRENT_HOST }}$request_uri;
+}
+
+server {
+    server_name {{ HOST }};
+    listen 443 ssl;
+    return 301 https://{{ CURRENT_HOST }}$request_uri;
+}
+
+server {
+    server_name {{ CURRENT_HOST }}
+                {{ HOST }};
+    listen 80;
+    return 301 https://{{ CURRENT_HOST }}$request_uri;
+}
+{% endif %}
