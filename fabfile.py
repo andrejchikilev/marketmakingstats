@@ -12,6 +12,34 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('fabfile')
 
 
+def _load_environment(env_name):
+    """
+    Sets specified environment
+    """
+    if env_name not in ENVIRONMENTS:
+        raise ValueError("Incorrect environment name ({}). "
+                         "Valid options are: {}"
+                         .format(env_name, ENVIRONMENTS.keys()))
+    _env = ENVIRONMENTS[env_name]
+    env.user = _env['USER']
+    env.hosts = ["{host}:{port}".format(host=_env['HOST'],
+                                        port=_env['SSH_PORT'])]
+    env.host_url = _env['HOST']
+    env.branch = _env['GIT_BRANCH']
+    env.current_host = _env['CURRENT_HOST']
+    env.env_name = env_name
+    env.settings_module = _env['SETTINGS_MODULE']
+    env.key_filename = _env['KEY_FILENAME']
+
+
+@task
+def prod():
+    """
+    Makes sure prod environment is enabled
+    """
+    _load_environment('PROD')
+
+
 @task
 def create_non_priveledged_user():
     with settings(warn_only=True):
