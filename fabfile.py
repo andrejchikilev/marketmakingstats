@@ -60,7 +60,7 @@ def install_system_packages():
 def checkout_repository():
     with cd(REMOTE_DEPLOY_DIR), settings(sudo_user=DEPLOYMENT_USER):
         if exists(PROJECT_NAME, use_sudo=True):
-            sudo('rm -r {project_dir}'.format(PROJECT_NAME))       
+            sudo('rm -rf {project_dir}'.format(project_dir=PROJECT_NAME))       
         sudo('git clone {repo} {dir}'.format(repo=REPOSITORY, dir=PROJECT_NAME))
         sudo('chown -R {user}:{group} {dir}'
             .format(user=DEPLOYMENT_USER,
@@ -88,9 +88,11 @@ def add_virtualenv_settings_to_profile(profile_file):
     ]
 
     for line in lines_to_append:
+        logging.info("Trying to add lines into user {}".format(profile_file))
         if not contains(profile_file, line):
             append(profile_file, '\n' + line,
                    use_sudo=True)
+            logging.info("{line} added".format(line=line))
 
     sudo('chown {user}:{group} {file}'
          .format(user=DEPLOYMENT_USER,
@@ -216,10 +218,19 @@ def config(restart_after=True):
 
     remote_conf_path = '%s/conf' % DEPLOY_DIR
 
+    sudo('mkdir -p %s' % remote_conf_path,
+         user=DEPLOYMENT_USER)
+    GUNI_HOST = '127.0.0.1'
+
     upload_template(os.path.join(LOCAL_CONF_DIR, 'gunicorn.sh'), remote_conf_path, context={
         'DEPLOY_DIR': DEPLOY_DIR,
         'ENV_PATH': ENV_PATH,
         'SETTINGS_MODULE': env.settings_module,
+        'GUNI_HOST': GUNI_HOST,
+        'GUNI_PORT': GUNI_PORT,
+        'GUNI_WORKERS': GUNI_WORKERS,
+        'GUNI_TIMEOUT': GUNI_TIMEOUT,
+        'GUNI_GRACEFUL_TIMEOUT': GUNI_GRACEFUL_TIMEOUT,
         'USER': DEPLOYMENT_USER,
         'GROUP': DEPLOYMENT_GROUP,
         'PROJECT_NAME': PROJECT_NAME

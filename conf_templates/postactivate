@@ -1,0 +1,8 @@
+#!/bin/bash
+# This hook is run after this virtualenv is activated.
+
+export DJANGO_SETTINGS_MODULE=%(SETTINGS_MODULE)s
+export DATABASE_URL=%(DATABASE_URL)s
+export DJANGO_DEBUG=False
+export DJANGO_LOCAL=False
+alias python=python3

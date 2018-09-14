@@ -50,6 +50,11 @@ DB_NAME = 'marketmakingstats'
 
 DATABASE_URL = 'postgres://%s:%s@%s/%s' % (DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
 
+GUNI_PORT = 8001
+GUNI_WORKERS = 3
+GUNI_TIMEOUT = 60
+GUNI_GRACEFUL_TIMEOUT = 180
+
 # Systemd service name
 BACKEND_SERVICE = 'marketmakingstats.service'
 
