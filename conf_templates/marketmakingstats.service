@@ -1,0 +1,18 @@
+[Unit]
+Description=%(PROJECT_NAME)s webserver (backend)
+Before=nginx.service
+After=postgresql.service
+
+[Service]
+User=%(USER)s
+Group=%(GROUP)s
+PIDFile=/run/gunicorn.pid
+ExecStart=%(DEPLOY_DIR)s/conf/gunicorn.sh
+StartLimitInterval=60
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+# When should this service be triggered? (this is the equivalent of SysV's runlevel 3)
+WantedBy=multi-user.target
