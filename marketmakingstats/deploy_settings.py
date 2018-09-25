@@ -3,7 +3,7 @@ import os
 USER = 'root'
 HOST = '165.227.126.229'
 
-CURRENT_HOST = '165.227.126.229'
+CURRENT_HOST = 'mamassistant.pro'
 
 REPOSITORY = 'https://github.com/andrejchikilev/marketmakingstats'
 PROJECT_NAME = 'marketmakingstats'
