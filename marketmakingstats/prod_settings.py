@@ -27,7 +27,10 @@ SECRET_KEY = '_-ygl*ytj_b)03)c9k9&z!0#m)y^cn))uuv6wiy68(&zx#z*=y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [HOST, CURRENT_HOST, 'www.%s' % HOST, 'www.%s'% CURRENT_HOST]
 
 
 # Application definition

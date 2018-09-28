@@ -11,7 +11,7 @@ server {
     {# Do not use certificates on vagrant installation #}
     {%- else %}
     ssl_certificate /etc/letsencrypt/live/{{ CURRENT_HOST }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/{{ CURRENT_HOST }}/privkey.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ CURRENT_HOST }}/privkey.pem;
     {%- endif %}
 
     access_log {{ DEPLOY_DIR }}/logs/nginx-access.log;
